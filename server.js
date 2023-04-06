@@ -56,6 +56,7 @@ app.post("/", async (req, res) => {
 
 app.delete("/", (req, res) => {
   // console.log("sdasd");
+  console.log(req.body);
   deleteData(req.body);
   res.send({ message: "deleted" });
 });
@@ -84,8 +85,9 @@ function add(dataList) {
 }
 
 function deleteData(dataList) {
+  console.log(dataList);
   notes
-    .findOneAndDelete(dataList)
+    .findByIdAndDelete(dataList.id)
     .then((value) => {
       console.log("Deleted Successfully");
     })
