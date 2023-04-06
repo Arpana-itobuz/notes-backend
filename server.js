@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
-import http from "http";
+import express, { response } from "express";
+import cors from "cors";
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+let port = 5000;
+let hostname = "127.0.0.1";
+
+app.listen(port, () => {
+  console.log("Listening..");
+});
 
 const url = `mongodb+srv://arpana:mongo@cluster1.e758xka.mongodb.net/test`;
 
@@ -18,122 +29,91 @@ mongoose
   });
 
 const notesSchema = new mongoose.Schema({
-  note1: String,
-  note2: String,
-  note3: String,
-  note4: String,
-  note5: String,
-  note6: String,
+  name: String,
 });
 
 const notes = mongoose.model("notes", notesSchema);
 
-const notesList = [
-  {
-    note1: "This is note 1",
-  },
-  {
-    note2: "This is note 2",
-  },
-  {
-    note3: "This is note 3",
-  },
-  {
-    note4: "This is note 4",
-  },
-  {
-    note5: "This is note 5",
-  },
-  {
-    note6: "This is note 6",
-  },
-];
+// async function getData() {
 
-// console.log(notesList);
+app.get("/", async (req, res) => {
+  const data = await findData();
+  res.send({
+    data: data,
+    message: "Data has been sent!",
+    status: 200,
+  });
+});
+// }
+// getData();
 
-// async function name() {
-//   await notes
-//     .insertMany(notesList)
-//     .then((value) => {
-//       console.log("Saved Successfully");
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
+// async function postData() {
+app.post("/", async (req, res) => {
+  await add(req.body);
+  res.send(req.body);
+  console.log(req.body);
+});
+
+app.delete("/", (req, res) => {
+  // console.log("sdasd");
+  deleteData(req.body);
+  res.send({ message: "deleted" });
+});
+app.put("/", async (req, res) => {
+  await updateData(req.body);
+  res.send("data updated");
+  // console.log(req.body);
+});
+// }
+// postData();
+
+async function findData() {
+  console.log(await notes.find({}));
+  return await notes.find({});
+}
+
+function add(dataList) {
+  notes
+    .insertMany(dataList)
+    .then((value) => {
+      console.log("Success");
+    })
+    .catch((err) => {
+      console.log("err");
+    });
+}
+
+function deleteData(dataList) {
+  notes
+    .findOneAndDelete(dataList)
+    .then((value) => {
+      console.log("Deleted Successfully");
+    })
+    .catch((err) => {
+      console.log("err");
+    });
+}
+
+// deleteData();
+
+function updateData(data1, data2) {
+  notes
+    .findOneAndUpdate(data1, data2)
+    .then((value) => {
+      console.log("Deleted Successfully");
+    })
+    .catch((err) => {
+      console.log("err");
+    });
+}
+
+// async function deletetion() {
+
 // }
 
-// name();
-
-async function note1Data() {
-  const data1 = await notes.findById("642c0b8eb7fe885a7dd9ebdf").then((d) => {
-    // console.log(d);
-  });
-  return data1;
-}
-
-note1Data();
-
-async function note2Data() {
-  const data1 = await notes.findById("642c0b8eb7fe885a7dd9ebe0").then((d) => {
-    // console.log(d);
-  });
-  return data1;
-}
-
-note2Data();
-
-async function note3Data() {
-  const data1 = await notes.findById("642c0b8eb7fe885a7dd9ebe1").then((d) => {
-    // console.log(d);
-  });
-  return data1;
-}
-
-note3Data();
-
-async function note4Data() {
-  const data1 = await notes.findById("642c0b8eb7fe885a7dd9ebe2").then((d) => {
-    // console.log(d);
-  });
-  return data1;
-}
-
-note4Data();
-
-async function note5Data() {
-  const data1 = await notes.findById("642c0b8eb7fe885a7dd9ebe3").then((d) => {
-    // console.log(d);
-  });
-  return data1;
-}
-
-note5Data();
-
-let totalData = [];
-const server = http.createServer((request, response) => {
-  try {
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Headers", "*");
-
-    request.on("data", () => {
-      console.log("data");
-    });
-    if (url === "/") {
-      async function note6Data() {
-        const data1 = await notes
-          .findById("642c0b8eb7fe885a7dd9ebe4")
-          .then((d) => {});
-        totalData.push(Buffer.concat(data1).toString());
-        console.log(totalData);
-        return totalData;
-      }
-      response.end(note6Data());
-    }
-  } catch (e) {
-    console.log(e);
-  }
-});
-
-server.listen(5000, () => {
-  console.log("Listening..");
-});
+// async function update() {
+//   app.put("/update", (req, res) => {
+//     res.send();
+//   });
+// }
+// updateData();
