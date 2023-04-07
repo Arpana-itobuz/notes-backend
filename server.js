@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import express, { response } from "express";
 import cors from "cors";
+import { userData } from "./config.js";
+
+console.log(userData);
 
 const app = express();
 app.use(express.json());
@@ -12,7 +15,7 @@ app.listen(port, () => {
   console.log("Listening..");
 });
 
-const url = `mongodb+srv://arpana:mongo@cluster1.e758xka.mongodb.net/test`;
+const url = `mongodb+srv://${userData.username}:${userData.password}@cluster1.e758xka.mongodb.net/${userData.dbName}?retryWrites=true&w=majority`;
 
 const connectionParams = {
   useNewUrlParser: true,
