@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import express, { response } from "express";
 import cors from "cors";
-import { userData } from "./config.js";
+import { userData } from "../config.js";
 
 console.log(userData);
 
