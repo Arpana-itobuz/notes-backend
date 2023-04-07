@@ -34,8 +34,6 @@ const notesSchema = new mongoose.Schema({
 
 const notes = mongoose.model("notes", notesSchema);
 
-// async function getData() {
-
 app.get("/", async (req, res) => {
   const data = await findData();
   res.send({
@@ -44,10 +42,7 @@ app.get("/", async (req, res) => {
     status: 200,
   });
 });
-// }
-// getData();
 
-// async function postData() {
 app.post("/", async (req, res) => {
   await add(req.body);
   res.send(req.body);
@@ -55,18 +50,16 @@ app.post("/", async (req, res) => {
 });
 
 app.delete("/", (req, res) => {
-  // console.log("sdasd");
   console.log(req.body);
   deleteData(req.body);
   res.send({ message: "deleted" });
 });
-app.put("/", async (req, res) => {
-  await updateData(req.body);
-  res.send("data updated");
-  // console.log(req.body);
+
+app.put("/", (req, res) => {
+  console.log(req.body[0], req.body[1]);
+  updateData(req.body[0], req.body[1]);
+  res.send({ message: "data updated" });
 });
-// }
-// postData();
 
 async function findData() {
   console.log(await notes.find({}));
@@ -96,26 +89,13 @@ function deleteData(dataList) {
     });
 }
 
-// deleteData();
-
 function updateData(data1, data2) {
   notes
     .findOneAndUpdate(data1, data2)
     .then((value) => {
-      console.log("Deleted Successfully");
+      console.log("Updated Successfully");
     })
     .catch((err) => {
-      console.log("err");
+      console.log(err);
     });
 }
-
-// async function deletetion() {
-
-// }
-
-// async function update() {
-//   app.put("/update", (req, res) => {
-//     res.send();
-//   });
-// }
-// updateData();
