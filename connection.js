@@ -1,4 +1,4 @@
-import { userData } from "../modules/config.js";
+import { userData } from "./config.js";
 import mongoose from "mongoose";
 
 const url = `mongodb+srv://${userData.username}:${userData.password}@cluster1.e758xka.mongodb.net/${userData.dbName}?retryWrites=true&w=majority`;

@@ -4,4 +4,3 @@ import mongoose from "mongoose";
 const notes = mongoose.model("notes", notesSchema);
 
 export default notes;
-console.log(notes);

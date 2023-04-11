@@ -3,7 +3,7 @@ import { add, deleteData, updateData, findData } from "../modules/functions.js";
 
 const nodeRouter = Router();
 
-nodeRouter.get("/", async (req, res) => {
+nodeRouter.get("/", async (req, res , next) => {
   try {
     const data = await findData();
     res.send({
@@ -20,31 +20,21 @@ nodeRouter.get("/", async (req, res) => {
   }
 });
 
-nodeRouter.post("/", async (req, res) => {
+nodeRouter.post("/", async (req, res , next) => {
   await add(req.body);
   res.send(req.body);
 });
 
-nodeRouter.delete("/", (req, res) => {
+nodeRouter.delete("/", (req, res,next) => {
   deleteData(req.body);
   res.send({ message: "deleted" });
 });
 
-nodeRouter.put("/", (req, res) => {
+nodeRouter.put("/", (req, res, next) => {
   updateData(req.body[0], req.body[1]);
   res.send({ message: "data updated" });
 });
 
-nodeRouter.use((req, res, next) => {
-  next(new Error("Page not found"));
-});
 
-nodeRouter.use((error, req, res, next) => {
-  if (error) {
-    res.send({
-      data: null,
-      message: error.message,
-      success: false,
-    });
-  }
-});
+
+export default nodeRouter;
